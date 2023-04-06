@@ -22,7 +22,19 @@ public class Main {
         List<Categories> categories = loadFromTSVFile(file);
         categories.add(new Categories("", "другое"));
 
-        FinanceManager financeManager = new FinanceManager(categories);
+
+        File fileBin = new File("data.bin");
+        FinanceManager financeManager;
+
+        //создали пустую мапу из категорий и трат по месяцам или считали из файла
+        //
+        if (fileBin.isFile()) {
+            financeManager = FinanceManager.loadFromBinFile(fileBin);
+            financeManager.toPrint(); //проверка - вывод на экарн
+        } else {
+            financeManager = new FinanceManager(categories);
+            financeManager.toPrint();
+        }
 
         try (ServerSocket serverSocket = new ServerSocket(ServerConfig.PORT);) { // стартуем сервер один раз
             while (true) { // в цикле принимаем подключения
