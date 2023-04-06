@@ -26,6 +26,7 @@ public class Main {
         FinanceManager financeManager;
 
         //создали пустую мапу из категорий и трат по месяцам или считали из файла
+        //
         if (fileBin.isFile()) {
             financeManager = FinanceManager.loadFromBinFile(fileBin);
             financeManager.toPrint(); //проверка - вывод на экарн
