@@ -92,6 +92,7 @@ public class FinanceManager extends Categories {
     public List<JSONObject> maxYearMonthDayCategory(String dateUser) {
 
         //мапа будет хранить сумму в нужный год по каждой категории, и из нее мы выберем максимум
+        //
         Map<String, Integer> yearCategory = new HashMap<>();
         //в нужный месяц
         Map<String, Integer> monthCategory = new HashMap<>();
