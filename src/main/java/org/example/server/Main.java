@@ -67,13 +67,6 @@ public class Main {
                     System.out.println(answer.toJSONString());
                     writer.println(answer.toJSONString());
 
-                    //макс траты по году, месяцу, дате (на введенную дату)
-                    List<JSONObject> list = financeManager.maxYearMonthDayCategory(date);
-
-                    for (int i=0; i < list.size(); i++){
-                        System.out.println(list.get(i).toJSONString());
-                        writer.println(list.get(i).toJSONString());
-                    }
                 }
             }
         } catch (IOException e) {
