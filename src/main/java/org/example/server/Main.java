@@ -22,17 +22,7 @@ public class Main {
         List<Categories> categories = loadFromTSVFile(file);
         categories.add(new Categories("", "другое"));
 
-        File fileBin = new File("data.bin");
-        FinanceManager financeManager;
-
-        //создали пустую мапу из категорий и трат по месяцам или считали из файла
-        if (fileBin.isFile()) {
-            financeManager = FinanceManager.loadFromBinFile(fileBin);
-            financeManager.toPrint(); //проверка - вывод на экарн
-        } else {
-            financeManager = new FinanceManager(categories);
-            financeManager.toPrint();
-        }
+        FinanceManager financeManager = new FinanceManager(categories);
 
         try (ServerSocket serverSocket = new ServerSocket(ServerConfig.PORT);) { // стартуем сервер один раз
             while (true) { // в цикле принимаем подключения
@@ -56,10 +46,6 @@ public class Main {
 
                     //добавляем новую покупку
                     financeManager.addPurchase(nameCategory, date, sum);
-
-                    //записываем все в файл
-                    File newFile = new File("data.bin");
-                    financeManager.saveBin(newFile);
 
                     //максимальная трата
                     JSONObject answer = financeManager.maxCategory();

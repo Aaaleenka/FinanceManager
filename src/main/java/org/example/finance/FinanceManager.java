@@ -24,11 +24,6 @@ public class FinanceManager extends Categories {
             mapMaxCategory.put(categories.get(i).category, 0);
         }
     }
-    //конструктор по заполнению мап из файла .bin
-    public FinanceManager(Map<String, Map<String, Integer>> map, Map<String, Integer> mapMaxCategory) {
-        this.map = map;
-        this.mapMaxCategory = mapMaxCategory;
-    }
 
     //добавили покупку
     public void addPurchase(String category, String date, int sum) {
@@ -170,76 +165,6 @@ public class FinanceManager extends Categories {
         answer.put("category", maxCategory);
         answerObject.put(title, answer);
         return answerObject;
-    }
-
-    public void saveBin(File textFile) throws IOException {
-        try (PrintWriter out = new PrintWriter(textFile);) {
-
-            for (Map.Entry<String, Map<String, Integer>> pair : map.entrySet()) {
-                String key = pair.getKey();
-                out.println(key);
-                Map<String, Integer> mapNew = pair.getValue();
-                for (Map.Entry<String, Integer> pair1 : mapNew.entrySet()) {
-                    String key1 = pair1.getKey();
-                    int value = pair1.getValue();
-                    out.println(":" + key1 + ":" + value);
-                }
-            }
-            out.println("mapMaxCategory");
-            for (Map.Entry<String, Integer> pair : mapMaxCategory.entrySet()) {
-                String key = pair.getKey();
-                int value = pair.getValue();
-                out.println(key + ":" + value);
-            }
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
-        }
-    }
-
-    public static FinanceManager loadFromBinFile(File textFile) throws IOException {
-
-        Map<String, Map<String, Integer>> map = new HashMap<>();
-        Map<String, Integer> mapMaxCategory = new HashMap<>();
-        FinanceManager financeManager;
-
-        try (BufferedReader input = new BufferedReader(new FileReader(textFile))) {
-
-            String key = "";
-            String s = input.readLine();
-            Map<String, Integer> mapPurchase = new HashMap<>();
-
-            while (s != null) {
-
-                if (s.charAt(0) == ':') {
-                    String[] parts = s.split(":");
-                    for (int j = 1; j < parts.length - 1; j = j + 2) {
-                        mapPurchase.put(parts[j], Integer.parseInt(parts[j + 1]));
-                    }
-                    map.put(key, mapPurchase);
-                } else if (!s.equals("mapMaxCategory")) {
-                    key = s;
-                    mapPurchase = new HashMap<>();
-                    map.put(key, mapPurchase);
-                } else if (s.equals("mapMaxCategory")) {
-                    s = input.readLine();
-                    ;
-                    while (s != null) {
-                        String[] parts = s.split(":");
-                        mapMaxCategory.put(parts[0], Integer.parseInt(parts[1]));
-                        s = input.readLine();
-                        ;
-                    }
-                }
-                s = input.readLine();
-                ;
-            }
-            financeManager = new FinanceManager(map, mapMaxCategory);
-            return financeManager;
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
-        }
-        financeManager = new FinanceManager(map, mapMaxCategory);
-        return financeManager;
     }
 
     public static int[] getYearMonthDay(String date) {
