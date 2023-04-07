@@ -84,7 +84,80 @@ public class FinanceManager extends Categories {
         return answerObject;
     }
 
-    public JSONObject createAnswer(int maxSum, String maxCategory, String title ){
+    public List<JSONObject> maxYearMonthDayCategory(String dateUser) {
+
+        //мапа будет хранить сумму в нужный год по каждой категории, и из нее мы выберем максимум
+        //
+        Map<String, Integer> yearCategory = new HashMap<>();
+        //в нужный месяц
+        Map<String, Integer> monthCategory = new HashMap<>();
+        //в нужный день
+        Map<String, Integer> dayCategory = new HashMap<>();
+
+        //получаем нужные год, месяц, день
+        int year = getYearMonthDay(dateUser)[0];
+        int month = getYearMonthDay(dateUser)[1];
+        int day = getYearMonthDay(dateUser)[2];
+
+        for (Map.Entry<String, Map<String, Integer>> pair : map.entrySet()) {
+            String key = pair.getKey();//категория
+            yearCategory.put(key, 0);
+            monthCategory.put(key, 0);
+            dayCategory.put(key, 0);
+            //достаем мапу всех покупок по категориям
+            if (pair.getValue() != null) {
+                Map<String, Integer> mapAllPurcasesCategory = pair.getValue();
+                for (Map.Entry<String, Integer> newpair : mapAllPurcasesCategory.entrySet()) {
+                    String date = newpair.getKey(); //получаем дату
+                    int currentYear = getYearMonthDay(date)[0]; // текущий год
+                    int currentMonth = getYearMonthDay(date)[1]; // текущий месяц
+                    int currentDay = getYearMonthDay(date)[2]; //текущая дата
+
+                    if (currentYear == year) {
+                        int sum = newpair.getValue(); //достаем новую покупку
+                        //достаем старую покупку
+                        int sumAll = yearCategory.get(key);
+                        yearCategory.put(key, sum + sumAll); //записываем
+                    }
+
+                    if ((currentYear == year) && (currentMonth == month)) {
+                        int sum = newpair.getValue(); //достаем новую покупку
+                        //достаем старую покупку
+                        int sumAll = monthCategory.get(key);
+                        monthCategory.put(key, sum + sumAll); //записываем
+                    }
+
+                    if ((currentYear == year) && (currentMonth == month) && (currentDay == day)) {
+                        int sum = newpair.getValue(); //достаем новую покупку
+                        //достаем старую покупку
+                        int sumAll = dayCategory.get(key);
+                        dayCategory.put(key, sum + sumAll); //записываем
+                    }
+                }
+            }
+        }
+
+        Map.Entry<String, Integer> maxEntryYear = Collections.max(yearCategory.entrySet(), Map.Entry.comparingByValue());
+        int maxSumYear = maxEntryYear.getValue();
+        String maxYearCategory = maxEntryYear.getKey();
+
+        Map.Entry<String, Integer> maxEntryMonth = Collections.max(monthCategory.entrySet(), Map.Entry.comparingByValue());
+        int maxSumMonth = maxEntryMonth.getValue();
+        String maxMonthCategory = maxEntryMonth.getKey();
+
+        Map.Entry<String, Integer> maxEntryDay = Collections.max(dayCategory.entrySet(), Map.Entry.comparingByValue());
+        int maxSumDay = maxEntryDay.getValue();
+        String maxDayCategory = maxEntryDay.getKey();
+
+        List<JSONObject> list = new ArrayList<>();
+        list.add(createAnswer(maxSumYear, maxYearCategory, "maxYearCategory"));
+        list.add(createAnswer(maxSumMonth, maxMonthCategory, "maxMonthCategory"));
+        list.add(createAnswer(maxSumDay, maxDayCategory, "maxDayCategory"));
+
+        return list;
+    }
+
+    public JSONObject createAnswer(int maxSum, String maxCategory, String title) {
 
         JSONObject answerObject = new JSONObject();
         JSONObject answer = new JSONObject();
@@ -164,4 +237,14 @@ public class FinanceManager extends Categories {
         return financeManager;
     }
 
+    public static int[] getYearMonthDay(String date) {
+        int[] dateInt = new int[3];
+        //разбить дату на int
+        String[] parts = date.split("\\.");
+        dateInt[0] = Integer.parseInt(parts[0]);
+        dateInt[1] = Integer.parseInt(parts[1]);
+        dateInt[2] = Integer.parseInt(parts[2]);
+        return dateInt;
+    }
 }
+

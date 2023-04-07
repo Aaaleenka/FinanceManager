@@ -22,12 +22,12 @@ public class Main {
         List<Categories> categories = loadFromTSVFile(file);
         categories.add(new Categories("", "другое"));
 
-
         File fileBin = new File("data.bin");
         FinanceManager financeManager;
 
+
         //создали пустую мапу из категорий и трат по месяцам или считали из файла
-        //
+
         if (fileBin.isFile()) {
             financeManager = FinanceManager.loadFromBinFile(fileBin);
             financeManager.toPrint(); //проверка - вывод на экарн
@@ -59,10 +59,21 @@ public class Main {
                     //добавляем новую покупку
                     financeManager.addPurchase(nameCategory, date, sum);
 
+                    //записываем все в файл
+                    financeManager.saveBin(fileBin);
+
                     //максимальная трата
                     JSONObject answer = financeManager.maxCategory();
                     System.out.println(answer.toJSONString());
                     writer.println(answer.toJSONString());
+
+                    //макс траты по году, месяцу, дате (на введенную дату)
+                    List<JSONObject> list = financeManager.maxYearMonthDayCategory(date);
+
+                    for (int i = 0; i < list.size(); i++) {
+                        System.out.println(list.get(i).toJSONString());
+                        writer.println(list.get(i).toJSONString());
+                    }
 
                 }
             }
@@ -96,7 +107,7 @@ public class Main {
         return categoriesList;
     }
 
-    private static String getCategory(String name, List<Categories> categories){
+    private static String getCategory(String name, List<Categories> categories) {
         String nameCategory = "";
         int num = -1; //номер соответсвующей категории -1 если другое
 
@@ -114,5 +125,4 @@ public class Main {
         }
         return nameCategory;
     }
-
 }

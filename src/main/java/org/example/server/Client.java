@@ -18,9 +18,9 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
 
         JSONObject sampleObject = new JSONObject();
-        sampleObject.put("title", "мыло");
-        sampleObject.put("date", "2023.02.08");
-        sampleObject.put("sum", 2000);
+        sampleObject.put("title", "акции");
+        sampleObject.put("date", "2022.01.09");
+        sampleObject.put("sum", 9000);
 
         try (Socket socket = new Socket(HOST, PORT);
              PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
