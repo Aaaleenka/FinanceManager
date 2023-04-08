@@ -83,11 +83,11 @@ public class Main {
         }
     }
 
-    static Purchase readAnswer(String body) throws JsonProcessingException {
+    public static Purchase readAnswer(String body) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
 
         Purchase purchase = mapper.readValue(body, Purchase.class);
-        System.out.println(purchase.toString());
+        //System.out.println(purchase.toString());
         return purchase;
     }
 

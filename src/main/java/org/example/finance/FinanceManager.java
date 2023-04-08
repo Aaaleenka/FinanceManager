@@ -31,6 +31,14 @@ public class FinanceManager extends Categories {
         this.mapMaxCategory = mapMaxCategory;
     }
 
+    public FinanceManager(){
+
+    }
+
+    public Map<String, Integer> getMaxMap() {
+        return mapMaxCategory;
+    }
+
     //добавили покупку
     public void addPurchase(String category, String date, int sum) {
 
@@ -66,19 +74,9 @@ public class FinanceManager extends Categories {
     }
 
     public JSONObject maxCategory() {
-
-        String maxCategory = null;
-        int maxSum = 0;
-
-        for (Map.Entry<String, Integer> pair : mapMaxCategory.entrySet()) {
-            String key = pair.getKey();
-            int value = pair.getValue();
-
-            if (value > maxSum) {
-                maxSum = value;
-                maxCategory = key;
-            }
-        }
+        Map.Entry<String, Integer> pair = Collections.max(mapMaxCategory.entrySet(), Map.Entry.comparingByValue());
+        int maxSum = pair.getValue();
+        String maxCategory = pair.getKey();
 
         JSONObject answerObject = createAnswer(maxSum, maxCategory, "maxCategory");
         return answerObject;
