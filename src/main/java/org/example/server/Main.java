@@ -64,17 +64,14 @@ public class Main {
 
                     //максимальная трата
                     JSONObject answer = financeManager.maxCategory();
+
                     System.out.println(answer.toJSONString());
                     writer.println(answer.toJSONString());
 
                     //макс траты по году, месяцу, дате (на введенную дату)
-                    List<JSONObject> list = financeManager.maxYearMonthDayCategory(date);
-
-                    for (int i = 0; i < list.size(); i++) {
-                        System.out.println(list.get(i).toJSONString());
-                        writer.println(list.get(i).toJSONString());
-                    }
-
+                    JSONObject object = financeManager.maxYearMonthDayCategory(date);
+                    System.out.println(object.toJSONString());
+                    writer.println(object.toJSONString());
                 }
             }
         } catch (IOException e) {

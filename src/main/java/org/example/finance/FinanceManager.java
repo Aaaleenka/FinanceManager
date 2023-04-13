@@ -78,11 +78,12 @@ public class FinanceManager extends Categories {
         int maxSum = pair.getValue();
         String maxCategory = pair.getKey();
 
-        JSONObject answerObject = createAnswer(maxSum, maxCategory, "maxCategory");
-        return answerObject;
+        JSONObject answer = new JSONObject();
+        answer.put("maxCategory", createAnswer(maxSum, maxCategory));
+        return answer;
     }
 
-    public List<JSONObject> maxYearMonthDayCategory(String dateUser) {
+    public JSONObject maxYearMonthDayCategory(String dateUser) {
 
         //мапа будет хранить сумму в нужный год по каждой категории, и из нее мы выберем максимум
         //
@@ -147,22 +148,21 @@ public class FinanceManager extends Categories {
         int maxSumDay = maxEntryDay.getValue();
         String maxDayCategory = maxEntryDay.getKey();
 
-        List<JSONObject> list = new ArrayList<>();
-        list.add(createAnswer(maxSumYear, maxYearCategory, "maxYearCategory"));
-        list.add(createAnswer(maxSumMonth, maxMonthCategory, "maxMonthCategory"));
-        list.add(createAnswer(maxSumDay, maxDayCategory, "maxDayCategory"));
+        JSONObject answerObject = new JSONObject();
+        answerObject.put("maxYearCategory", createAnswer(maxSumYear, maxYearCategory));
+        answerObject.put("maxMonthCategory", createAnswer(maxSumMonth, maxMonthCategory));
+        answerObject.put("maxDayCategory", createAnswer(maxSumDay, maxDayCategory));
 
-        return list;
+        return answerObject;
     }
 
-    public JSONObject createAnswer(int maxSum, String maxCategory, String title) {
+    public JSONObject createAnswer(int maxSum, String maxCategory) {
 
-        JSONObject answerObject = new JSONObject();
         JSONObject answer = new JSONObject();
         answer.put("sum", maxSum);
         answer.put("category", maxCategory);
-        answerObject.put(title, answer);
-        return answerObject;
+
+        return answer;
     }
 
     public void saveBin(File textFile) throws IOException {
